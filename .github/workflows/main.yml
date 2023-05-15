@@ -1,0 +1,38 @@
+name: Update Rules
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Get previous commit
+        id: previous_commit
+        run: echo "::set-output name=commit::$(git rev-parse HEAD~1)"
+
+      - name: Get current commit
+        id: current_commit
+        run: echo "::set-output name=commit::$(git rev-parse HEAD)"
+
+      - name: Compare commits
+        id: compare_commits
+        run: |
+          URL="https://api.github.com/repos/0x0faisal/test-rules/compare/${{ steps.previous_commit.outputs.commit }}...${{ steps.current_commit.outputs.commit }}"
+          RESPONSE=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$URL")
+          echo "::set-output name=changes::$(echo $RESPONSE | jq -r '.files[].filename')"
