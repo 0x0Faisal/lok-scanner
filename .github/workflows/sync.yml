@@ -16,6 +16,6 @@ jobs:
       - name: Sync changes
         uses: repo-sync/github-sync@v2
         with:
-          source_repo: elastic/detection-rules
+          source_repo: 0x0Faisal/test-rules
           source_branch: main
           destination_branch: main
