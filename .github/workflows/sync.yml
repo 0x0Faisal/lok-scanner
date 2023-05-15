@@ -1,0 +1,21 @@
+name: Sync Detection Rules
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Sync changes
+        uses: repo-sync/github-sync@v2
+        with:
+          source_repo: elastic/detection-rules
+          source_branch: main
+          destination_branch: main
