@@ -18,4 +18,4 @@ jobs:
         with:
           source_repo: 0x0Faisal/test-rules
           source_branch: main
-          destination_branch: main
+          destination_branch: master
